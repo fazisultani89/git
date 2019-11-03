@@ -9,7 +9,7 @@
 
     - name: INSATLLING VSFTPD
       yum: 
-         name:  "{{
+         name:  "{{ svc_2 }}
          state: present
 
 ##################################################
