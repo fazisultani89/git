@@ -1,0 +1,76 @@
+---
+- name: installing/configuration pxe server 
+  hosts: vm1
+  vars: 
+    - rpm1: vsftpd
+    - rpm2: tftp-server
+    - rpm3: dhcp
+    - rpm4: syslinux
+    - svc1: vsftpd
+    - svc2: xinetd
+    - svc3: dhcpd
+   
+tasks:
+
+################################33
+- name: installing packages
+  yum: 
+    name: 
+      - "{{ rpm1 }}"
+      - "{{ rpm2 }}"
+      - "{{ rpm3 }}"
+      - "{{ rpm4 }}"
+
+    state: present
+
+    #######################################3
+    ########### play2 #####################
+
+
+- name: copying dvd to vsftpd 
+  copy: 
+    src: /mnt/
+    dest: /var/ftp/pub
+
+- name: ensuring vsftp is running/enabled
+  service: 
+    name: "{{ svc1 }}"
+    state: started
+    enabled: yes
+
+    ##############################################
+    ############ play3 ###########################
+
+
+- name: setting up tftp server
+  copy: 
+    src: /var/ftp/pub/isolinux/
+    dest: /var/lib/tftpboot
+
+
+- name: creating pxelinux.cfg directory on /var/lib/tftpboot
+   file:
+     path: /var/lib/tftpboot/pxelinux.cfg
+     state: directory
+
+- name: rename isolinux.cfg in pxelinux.cfg with name default
+  copy:
+    src: /var/lib/tftpboot/isolinux/isolinux.cfg
+    dest: /var/lib/tftp/pxelinux.cfg/default
+
+- name: copying pxelinux.0 to /var/lib/tftpboot
+  copy: 
+    src: /usr/share/syslinux/pxelinux.0
+    dest: /var/lib/
+
+
+
+###############################################################
+############## PLAY 4 #########################################
+
+
+
+- name: configuartion dhcpd
+  Blockinfile:
+    path: /etc/dhcp/dhcpd.conf
+
