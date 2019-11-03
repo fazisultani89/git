@@ -1,0 +1,23 @@
+---
+- name: insatlling vsftpd and ensrueing its enabled/running
+  hosts: 
+    - vm1
+    - vm3
+  vars_files:  " /root/my-vars"
+  tasks:
+###############################################
+
+    - name: INSATLLING VSFTPD
+      yum: 
+         name:  "{{
+         state: present
+
+##################################################
+
+
+    - name:  ENSUREING VSFTPD IS RUNNING/ENABLING 
+      service:
+         name: "{{  svc_2 }}"
+         state: started 
+         enabled: yes
+    
