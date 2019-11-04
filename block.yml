@@ -1,0 +1,13 @@
+---
+- name: adding bulk content
+  hosts:
+  tasks:
+  - name: adding content to a file
+    blockinfile:
+       path: /tmp/test-file
+       create: yes
+       block:  |
+        THIS IS MY FIRST LINE
+         THIS IS SECOND
+         THIS IS THIRD
+         
